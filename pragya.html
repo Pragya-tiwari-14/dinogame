@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <title>SUBWAY SUFERS WITH DRAGON</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <div class = "gameContainer">
+        <div class="gameOver">GAme over</div>
+        <div class="dino"></div>
+        <div id="scoreCount">YOUR SCORE : 0</div>
+        <div class="obstacle obstacleAni"></div>
+    </div>
+    
+</body>
+</html>
+document.onkeydown = function(e){
+    console.log("key code is :" ,e.keyCode)
+    if(e.keyCode == 38){
+        dino = document.querySelector(('.dino'));
+        dino.classList.add('animateDino');
+        setTimeout(() =>{
+            dino.classList.remove('animateDino')
+
+        },700);
+
+    }
+}
+setinterval(() => {
+    dino = document.querySelector('.dino');
+    gameOver = document.querySelector('.gameOver');
+    obstacle = document.querySelector('.obstacle');
+
+    dx = window.getComputedStyle(dino , null).getPropertyValue('left');
+    dy = window.getComputedStyle(dino , null).getPropertyValue('top');
+    ox = window.getComputedStyle(obstacle , null).getPropertyValue('left');
+    oy = window.getComputedStyle(obstacle , null).getPropertyValue('top');
+
+    
+    offsetX = Math.abs(dx - ox);
+    offsetY = Math.abs(dy - oy);
+
+
+},100);
+
+
+score = 0;
+document.onkeydown = function(e) {
+    console.log("key code is :", e.keyCode);
+    if (e.keyCode == 38) { // Up arrow
+        let dino = document.querySelector('.dino');
+        dino.classList.add('animateDino');
+        setTimeout(() => {
+            dino.classList.remove('animateDino');
+        }, 700);
+    }
+    if (e.keyCode == 39) { // Up arrow
+        let dino = document.querySelector('.dino');
+        let dinoX = parseInt(window.getComputedStyle(dino).getPropertyValue('left'));
+        dino.style.left = (dinoX - 112 )+ "px";
+    }
+};
+
+setInterval(() => {
+    let dino = document.querySelector('.dino');
+    let gameOver = document.querySelector('.gameOver');
+    let obstacle = document.querySelector('.obstacle');
+
+    let dx = parseInt(window.getComputedStyle(dino).getPropertyValue('left'));
+    let dy = parseInt(window.getComputedStyle(dino).getPropertyValue('top'));
+    let ox = parseInt(window.getComputedStyle(obstacle).getPropertyValue('left'));
+    let oy = parseInt(window.getComputedStyle(obstacle).getPropertyValue('top'));
+
+    let offsetX = Math.abs(dx - ox);
+    let offsetY = Math.abs(dy - oy);
+    console.log(offsetX ,offsetY)
+    if (offsetX < 73 && offsetY < 52) {
+        gameOver.style.visibility = "visible";
+       
+        obstacle.classList.remove('obstacleAni');
+    } else if(offSetX && cross){
+        score+=1;
+        updateScore(score);
+        cross = false
+        setTimeout(() =>){
+            cross = true;
+        },1000);
+        setTimeout(() => {
+            aniDur = parseFloat(window.getComputedStyle(obstacle,null).getPropertyValue('animation - duration'));
+            newDur = aniDur - 0.1;
+            obstacle.style.animationDuration = newDur + 's';
+            console.log('New animation duration:' , newDur)
+        },500);
+       
+    },10);
+
+function updateScore(score){
+    scoreCont.innerHTML = "Your Score:" + score
+}
+let keysPressed = {};
+
+document.onkeydown = function(e) {
+    keysPressed[e.keyCode] = true;
+
+    let dino = document.querySelector('.dino');
+
+    // Jump
+    if (keysPressed[38]) {
+        dino.classList.add('animateDino');
+        setTimeout(() => {
+            dino.classList.remove('animateDino');
+        }, 700);
+    }
+
+    // Move Right
+    if (keysPressed[39]) {
+        let dinoX = parseInt(window.getComputedStyle(dino).getPropertyValue('left'));
+        dino.style.left = (dinoX + 112) + "px";
+    }
+
+    // Move Left
+    if (keysPressed[37]) {
+        let dinoX = parseInt(window.getComputedStyle(dino).getPropertyValue('left'));
+        dino.style.left = (dinoX - 112) + "px";
+    }
+};
+
+document.onkeyup = function(e) {
+    delete keysPressed[e.keyCode];
+};
+let score = 0;
+ cross = true;
+
+if (e.keyCode === 38) {
+    let dino = document.querySelector('.dino');
+
+    // Add vertical jump animation
+    dino.classList.add('animateDino');
+
+    // Move forward (horizontal position)
+    let dinoX = parseInt(window.getComputedStyle(dino).getPropertyValue('left'));
+    dino.style.left = (dinoX + 50) + "px"; // adjust value as needed
+
+    // Remove animation after it finishes
+    setTimeout(() => {
+        dino.classList.remove('animateDino');
+    }, 700);
+}
+
+setInterval(() => {
+    let dino = document.querySelector('.dino');
+    let gameOver = document.querySelector('.gameOver');
+    let obstacle = document.querySelector('.obstacle');
+
+    let dx = parseInt(window.getComputedStyle(dino).getPropertyValue('left'));
+    let dy = parseInt(window.getComputedStyle(dino).getPropertyValue('top'));
+
+    let ox = parseInt(window.getComputedStyle(obstacle).getPropertyValue('left'));
+    let oy = parseInt(window.getComputedStyle(obstacle).getPropertyValue('top'));
+
+    let offsetX = Math.abs(dx - ox);
+    let offsetY = Math.abs(dy - oy);
+    console.log(offsetX, offsetY);
+
+    if (offsetX < 73 && offsetY < 52) {
+        gameOver.style.visibility = "visible";
+        obstacle.classList.remove('obstacleAni');
+    } else if (offsetX < 145 && cross) { // Fixed typo (offSetX → offsetX), added sensible collision buffer
+        score += 1;
+        updateScore(score);
+        cross = false;
+        setTimeout(() => {
+            cross = true;
+        }, 1000);
+
+        setTimeout(() => {
+            let aniDur = parseFloat(window.getComputedStyle(obstacle, null).getPropertyValue('animation-duration'));
+            let newDur = aniDur - 0.1;
+            if (newDur > 0.5) { // Prevents animation from getting too fast
+                obstacle.style.animationDuration = newDur + 's';
+                console.log('New animation duration:', newDur);
+            }
+        }, 500);
+    }
+}, 10);
+
+// Score update function
+function updateScore(score) {
+    let scoreCont = document.querySelector('.scoreCont');
+    scoreCont.innerHTML = "Your Score: " + score;
+}
+let score = 0;
+let cross = true;
+
+document.onkeydown = function (e) {
+    // Detect Up Arrow key (keyCode 38)
+    if (e.keyCode === 38) {
+        let dino = document.querySelector('.dino');
+
+        // Add vertical jump animation
+        dino.classList.add('animateDino');
+
+        // Move forward (horizontal position)
+        let dinoX = parseInt(window.getComputedStyle(dino).getPropertyValue('left'));
+        dino.style.left = (dinoX + 50) + "px";  // Move forward by 50px (adjust as needed)
+
+        // Remove jump animation after it finishes (700ms based on CSS animation duration)
+        setTimeout(() => {
+            dino.classList.remove('animateDino');
+        }, 700); // Duration of the jump animation
+    }
+};
+
+// Continuous game logic, checking for collision and updating score
+setInterval(() => {
+    let dino = document.querySelector('.dino');
+    let gameOver = document.querySelector('.gameOver');
+    let obstacle = document.querySelector('.obstacle');
+
+    // Get the current positions of dino and obstacle
+    let dx = parseInt(window.getComputedStyle(dino).getPropertyValue('left'));
+    let dy = parseInt(window.getComputedStyle(dino).getPropertyValue('bottom')); // Use 'bottom' to track vertical position
+
+    let ox = parseInt(window.getComputedStyle(obstacle).getPropertyValue('left'));
+    let oy = parseInt(window.getComputedStyle(obstacle).getPropertyValue('bottom')); // 'bottom' for obstacle's vertical position
+
+    // Check for collision by comparing horizontal and vertical distances
+    let offsetX = Math.abs(dx - ox);
+    let offsetY = Math.abs(dy - oy);
+
+    // If the dino collides with the obstacle, show Game Over screen
+    if (offsetX < 73 && offsetY < 52) {  // Adjust these values based on the size of your dino and obstacle
+        gameOver.style.visibility = "visible";
+        obstacle.classList.remove('obstacleAni');  // Stop obstacle animation
+    }
+    // If the dino successfully avoids the obstacle, increase the score
+    else if (offsetX < 145 && cross) {  // Adjust for a buffer of when to increase score
+        score += 1;
+        updateScore(score);
+        cross = false;  // Prevent rapid score increments
+        setTimeout(() => {
+            cross = true;
+        }, 1000);  // Prevent rapid score increments by adding a delay
+
+        // Gradually increase the obstacle's speed (animation duration)
+        setTimeout(() => {
+            let aniDur = parseFloat(window.getComputedStyle(obstacle, null).getPropertyValue('animation-duration'));
+            let newDur = aniDur - 0.1;
+            if (newDur > 1) {  // Prevents the animation from becoming too fast
+                obstacle.style.animationDuration = newDur + 's';
+            }
+        }, 500);
+    }
+}, 10);  // Continuously check for collisions every 10ms
+
+// Score update function
+function updateScore(score) {
+    let scoreCont = document.querySelector('#scoreCount');  // Score container element
+    scoreCont.innerHTML = "YOUR SCORE : " + score;
+}
+
+document.onkeydown = function (e) {
+    // Detect Up Arrow key (keyCode 38)
+    if (e.keyCode === 38) {
+        let dino = document.querySelector('.dino');
+
+        // Add vertical jump animation
+        dino.classList.add('animateDino');
+
+        // Move forward (horizontal position)
+        let dinoX = parseInt(window.getComputedStyle(dino).getPropertyValue('left'));
+        dino.style.left = (dinoX + 50) + "px";  // Move forward by 50px (adjust as needed)
+
+        // Remove jump animation after it finishes (700ms based on CSS animation duration)
+        setTimeout(() => {
+            dino.classList.remove('animateDino');
+        }, 700); // Duration of the jump animation
+    }
+};
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background-color: red;
+    overflow: hidden;
+}
+.gameContainer{
+    background-image: url('bg.png');
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: 100vw 100vh;
+    width: 100%;
+}
+.dino{
+    background-image: url('dino.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 233px;
+    height: 114px;
+    position: absolute ;
+    bottom:  0;
+    left :52px;
+}
+.obstacle{
+    width: 150px;
+    height: 123px;
+    background-image: url('dragon.png');
+    background-size: cover;
+    position: absolute;
+    bottom: 0;
+    left:43vw ;
+
+}
+.animateDino{
+    animation: dino 0.6s linear;
+}
+.obstacleAni{
+    animation: obstacleAni 5s linear infinite;
+}
+.gameOver{
+    
+    top: 63px;
+    font-size: 53px;
+    text-align: center;
+    visibility: hidden;
+    font-family: sans-serif;
+}
+#scoreCont{
+    position: relative;
+    left: 23px;
+    top: 23px;
+    border: 2px solid black;
+    padding: 10px;
+    font-family: sans-serif;
+}
+@keyframes dino{
+    0%{
+        bottom: 0;
+    }
+    50%{
+        bottom: 440px;
+    }
+    100%{
+        bottom: 0;
+    }
+}
+@keyframes obstacleAni{
+    0%{
+        left: 100vw;
+    }
+    100%{
+        left: -10vw ;
+
+    }
+}
